@@ -3,6 +3,8 @@ A minimalist LLM prompting system for retro computers. Because KB and MHz are pl
 
 RetroChat is a proof-of-concept project that connects your retro computer to a modern LLM served by Ollama.
 
+![Hatari screenshot](img/hatari.png)
+
 ## Architecture
 Because computers designed in the 80s lack the processing power to handle TLS encryption or complex JSON parsing, RetroChat relies on a "Man-in-the-Middle" proxy architecture:
 - the retro computer runs a minimal terminal client.
