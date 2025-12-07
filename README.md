@@ -1,4 +1,4 @@
-# RetroCha put
+# RetroChat
 A minimalist LLM prompting system for retro computers. Because KB and MHz are plenty enough for prompting purposes!
 
 RetroChat is a proof-of-concept project that connects your retro computer to a modern LLM served by Ollama.
