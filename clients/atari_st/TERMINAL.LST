@@ -1,0 +1,70 @@
+REM This file is part of the RetroChat distribution (https://github.com/fvandw/retrochat).
+REM Copyright (c) 2025 fvandw.
+REM 
+REM This program is free software: you can redistribute it and/or modify  
+REM it under the terms of the GNU General Public License as published by  
+REM the Free Software Foundation, version 3.
+REM
+REM This program is distributed in the hope that it will be useful, but 
+REM WITHOUT ANY WARRANTY; without even the implied warranty of 
+REM MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+REM General Public License for more details.
+REM
+REM You should have received a copy of the GNU General Public License 
+REM along with this program. If not, see <http://www.gnu.org/licenses/>.
+REM
+REM ATARI ST RetroChat GFA Client
+REM
+VOID XBIOS(15,7,0,0,0,0,-1)
+CLS
+PRINT "RetroChat"
+PRINT "---------------"
+PRINT "> ";
+buffer$=""
+DO
+  REM ------ RECEIVING DATA ------
+  IF BIOS(1,1)
+    rec_val&=BIOS(2,1)
+    PRINT CHR$(rec_val&);
+  ENDIF
+  REM ------ KEYBOARD ------
+  k$=INKEY$
+  IF k$<>""
+    k_val&=ASC(k$)
+    REM ------
+    REM ENTER
+    REM ------
+    IF k_val&=13
+      PRINT ""
+      REM Sends the buffer to the proxy
+      FOR i&=1 TO LEN(buffer$)
+        VOID BIOS(3,1,ASC(MID$(buffer$,i&,1)))
+      NEXT i&
+      REM Sends end of line
+      VOID BIOS(3,1,13)
+      VOID BIOS(3,1,10)
+      buffer$=""
+      REM ---------
+      REM BACKSPACE
+      REM ---------
+    ELSE IF k_val&=8
+      REM no need to backspace if the buffer is empty
+      IF LEN(buffer$)>0
+        REM buffer clipping
+        buffer$=LEFT$(buffer$,LEN(buffer$)-1)
+        REM updating the screen
+        REM ASCII 8 -> backspace
+        PRINT CHR$(8);" ";CHR$(8);
+      ENDIF
+      REM -------------------
+      REM ANY OTHER CHARACTER
+      REM -------------------
+    ELSE
+      REM Appending the buffer + display
+      buffer$=buffer$+k$
+      PRINT k$;
+    ENDIF
+  ENDIF
+  REM ESC to quitter
+  EXIT IF k$=CHR$(27)
+LOOP
